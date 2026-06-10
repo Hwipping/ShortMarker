@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Cmd Bookmark Opener",
+  "name": "ShortMarker",
   "version": "1.0.0",
-  "description": "Open the first nine bookmark bar URLs with Safari-style keyboard commands.",
+  "description": "Safari-style bookmark bar shortcuts for Chrome.",
   "permissions": ["bookmarks"],
   "background": {
     "service_worker": "src/background.js",

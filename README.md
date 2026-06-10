@@ -1,8 +1,8 @@
-# Cmd Bookmark Opener
+# ShortMarker
 
 Safari-style bookmark bar shortcuts for Chrome on macOS.
 
-Cmd Bookmark Opener lets you open the first nine top-level bookmark bar URLs with Chrome extension commands. Folders are skipped while counting, so the next URL bookmark keeps the next number.
+ShortMarker lets you open the first nine top-level bookmark bar URLs with Chrome extension commands. Folders are skipped while counting, so the next URL bookmark keeps the next number.
 
 ## Features
 
@@ -18,9 +18,9 @@ Cmd Bookmark Opener lets you open the first nine top-level bookmark bar URLs wit
 
 Chrome already reserves `Command+1` through `Command+9` on macOS for tab switching. Chrome extensions cannot disable or override some browser-level shortcuts.
 
-For that reason, this extension declares nine commands without default shortcuts. After installing it, open `chrome://extensions/shortcuts` and assign shortcuts manually. If Chrome refuses `Command+1` through `Command+9`, use a non-reserved alternative such as `Command+Shift+1` through `Command+Shift+9`.
+For that reason, ShortMarker declares nine commands without default shortcuts. After installing it, open `chrome://extensions/shortcuts` and assign shortcuts manually. If Chrome refuses `Command+1` through `Command+9`, use a non-reserved alternative such as `Command+Shift+1` through `Command+Shift+9`.
 
-Chrome's commands API also allows only a limited number of default shortcut suggestions in `manifest.json`, so this extension intentionally leaves the command shortcuts unassigned by default.
+Chrome's commands API also allows only a limited number of default shortcut suggestions in `manifest.json`, so ShortMarker intentionally leaves the command shortcuts unassigned by default.
 
 ## Installation
 
@@ -28,7 +28,7 @@ Chrome's commands API also allows only a limited number of default shortcut sugg
 2. Open `chrome://extensions` in Chrome.
 3. Enable `Developer mode`.
 4. Click `Load unpacked`.
-5. Select the `cmd-bookmark-opener` folder.
+5. Select the `ShortMarker` folder.
 6. Open `chrome://extensions/shortcuts`.
 7. Assign shortcuts to `Open bookmark bar URL 1` through `Open bookmark bar URL 9`.
 
@@ -72,17 +72,17 @@ npm run validate
 ## Docker Test
 
 ```sh
-docker build -t cmd-bookmark-opener .
-docker run --rm cmd-bookmark-opener
+docker build -t shortmarker .
+docker run --rm shortmarker
 ```
 
 ---
 
-# Cmd Bookmark Opener 한국어 안내
+# ShortMarker 한국어 안내
 
 macOS Chrome에서 Safari처럼 북마크바 사이트를 단축키로 여는 확장 프로그램입니다.
 
-Cmd Bookmark Opener는 Chrome 확장 명령을 통해 북마크바의 상위 URL 북마크 1번부터 9번까지를 열 수 있게 해줍니다. 폴더는 번호 계산에서 제외되므로, 폴더 뒤에 있는 URL 북마크가 다음 번호를 이어받습니다.
+ShortMarker는 Chrome 확장 명령을 통해 북마크바의 상위 URL 북마크 1번부터 9번까지를 열 수 있게 해줍니다. 폴더는 번호 계산에서 제외되므로, 폴더 뒤에 있는 URL 북마크가 다음 번호를 이어받습니다.
 
 ## 주요 기능
 
@@ -98,9 +98,9 @@ Cmd Bookmark Opener는 Chrome 확장 명령을 통해 북마크바의 상위 URL
 
 macOS Chrome은 이미 `Command+1`부터 `Command+9`까지를 탭 전환 단축키로 사용합니다. Chrome 확장 프로그램은 일부 브라우저 기본 단축키를 비활성화하거나 강제로 우선할 수 없습니다.
 
-그래서 이 확장은 9개의 명령만 선언하고 기본 단축키는 비워둡니다. 설치 후 `chrome://extensions/shortcuts`로 이동해 직접 단축키를 지정하세요. Chrome이 `Command+1`부터 `Command+9`까지를 허용하지 않으면 `Command+Shift+1`부터 `Command+Shift+9` 같은 대체 조합을 사용하면 됩니다.
+그래서 ShortMarker는 9개의 명령만 선언하고 기본 단축키는 비워둡니다. 설치 후 `chrome://extensions/shortcuts`로 이동해 직접 단축키를 지정하세요. Chrome이 `Command+1`부터 `Command+9`까지를 허용하지 않으면 `Command+Shift+1`부터 `Command+Shift+9` 같은 대체 조합을 사용하면 됩니다.
 
-또한 Chrome commands API는 `manifest.json`에서 기본 단축키 제안 수를 제한하므로, 이 확장은 의도적으로 기본 단축키를 지정하지 않습니다.
+또한 Chrome commands API는 `manifest.json`에서 기본 단축키 제안 수를 제한하므로, ShortMarker는 의도적으로 기본 단축키를 지정하지 않습니다.
 
 ## 설치 방법
 
@@ -108,7 +108,7 @@ macOS Chrome은 이미 `Command+1`부터 `Command+9`까지를 탭 전환 단축�
 2. Chrome에서 `chrome://extensions`를 엽니다.
 3. `Developer mode`를 켭니다.
 4. `Load unpacked`를 클릭합니다.
-5. `cmd-bookmark-opener` 폴더를 선택합니다.
+5. `ShortMarker` 폴더를 선택합니다.
 6. `chrome://extensions/shortcuts`를 엽니다.
 7. `Open bookmark bar URL 1`부터 `Open bookmark bar URL 9`까지 원하는 단축키를 지정합니다.
 
@@ -152,6 +152,6 @@ npm run validate
 ## Docker 테스트
 
 ```sh
-docker build -t cmd-bookmark-opener .
-docker run --rm cmd-bookmark-opener
+docker build -t shortmarker .
+docker run --rm shortmarker
 ```
