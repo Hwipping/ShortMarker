@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Cmd Bookmark Opener",
+  "version": "1.0.0",
+  "description": "Open the first nine bookmark bar URLs with Safari-style keyboard commands.",
+  "permissions": ["bookmarks"],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "commands": {
+    "open-bookmark-1": {
+      "description": "Open bookmark bar URL 1"
+    },
+    "open-bookmark-2": {
+      "description": "Open bookmark bar URL 2"
+    },
+    "open-bookmark-3": {
+      "description": "Open bookmark bar URL 3"
+    },
+    "open-bookmark-4": {
+      "description": "Open bookmark bar URL 4"
+    },
+    "open-bookmark-5": {
+      "description": "Open bookmark bar URL 5"
+    },
+    "open-bookmark-6": {
+      "description": "Open bookmark bar URL 6"
+    },
+    "open-bookmark-7": {
+      "description": "Open bookmark bar URL 7"
+    },
+    "open-bookmark-8": {
+      "description": "Open bookmark bar URL 8"
+    },
+    "open-bookmark-9": {
+      "description": "Open bookmark bar URL 9"
+    }
+  }
+}
