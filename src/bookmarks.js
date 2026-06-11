@@ -34,7 +34,7 @@ export function getTopLevelBookmarkBarUrls(bookmarkBarNode) {
 }
 
 export function getBookmarkUrlByOneBasedIndex(bookmarkBarNode, index) {
-  if (!Number.isInteger(index) || index < 1 || index > 9) {
+  if (!Number.isInteger(index) || index < 1 || index > 10) {
     return null;
   }
 
@@ -43,6 +43,6 @@ export function getBookmarkUrlByOneBasedIndex(bookmarkBarNode, index) {
 }
 
 export function getCommandIndex(command) {
-  const match = /^open-bookmark-([1-9])$/.exec(command);
+  const match = /^open-bookmark-([1-9]|10)$/.exec(command);
   return match ? Number(match[1]) : null;
 }

@@ -1,12 +1,22 @@
 import {
   getBookmarkBarFromTree,
   getBookmarkUrlByOneBasedIndex,
-  getCommandIndex
+  getCommandIndex,
+  isAllowedBookmarkUrl
 } from "./bookmarks.js";
+
+export const CUSTOM_URL_STORAGE_KEY = "customUrl";
+export const OPEN_CUSTOM_URL_COMMAND = "open-custom-url";
 
 async function getBookmarkBar() {
   const tree = await chrome.bookmarks.getTree();
   return getBookmarkBarFromTree(tree);
+}
+
+async function getCustomUrl() {
+  const result = await chrome.storage.sync.get({ [CUSTOM_URL_STORAGE_KEY]: "" });
+  const url = result[CUSTOM_URL_STORAGE_KEY];
+  return isAllowedBookmarkUrl(url) ? url : null;
 }
 
 async function navigateActiveTab(url) {
@@ -26,6 +36,16 @@ async function navigateActiveTab(url) {
 }
 
 export async function openBookmarkForCommand(command) {
+  if (command === OPEN_CUSTOM_URL_COMMAND) {
+    const customUrl = await getCustomUrl();
+    if (!customUrl) {
+      return false;
+    }
+
+    await navigateActiveTab(customUrl);
+    return true;
+  }
+
   const index = getCommandIndex(command);
   if (!index) {
     return false;

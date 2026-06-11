@@ -1,14 +1,21 @@
 {
   "manifest_version": 3,
   "name": "ShortMarker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Safari-style bookmark bar shortcuts for Chrome.",
-  "permissions": ["bookmarks"],
+  "permissions": ["bookmarks", "storage"],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
   },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "commands": {
+    "open-custom-url": {
+      "description": "Open the custom ShortMarker URL"
+    },
     "open-bookmark-1": {
       "description": "Open bookmark bar URL 1"
     },
@@ -35,6 +42,9 @@
     },
     "open-bookmark-9": {
       "description": "Open bookmark bar URL 9"
+    },
+    "open-bookmark-10": {
+      "description": "Open bookmark bar URL 10"
     }
   }
 }

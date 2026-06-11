@@ -28,7 +28,14 @@ const bookmarkTree = [
           { id: "16", title: "Local file", url: "file:///Users/example/secret.txt" },
           { id: "17", title: "Data URL", url: "data:text/html,<h1>hello</h1>" },
           { id: "13", title: "Two", url: "https://two.example" },
-          { id: "14", title: "Three", url: "https://three.example" }
+          { id: "14", title: "Three", url: "https://three.example" },
+          { id: "18", title: "Four", url: "https://four.example" },
+          { id: "19", title: "Five", url: "https://five.example" },
+          { id: "20", title: "Six", url: "https://six.example" },
+          { id: "21", title: "Seven", url: "https://seven.example" },
+          { id: "22", title: "Eight", url: "https://eight.example" },
+          { id: "23", title: "Nine", url: "https://nine.example" },
+          { id: "24", title: "Ten", url: "https://ten.example" }
         ]
       },
       { id: "2", title: "Other Bookmarks", children: [] }
@@ -44,7 +51,14 @@ test("lists only top-level URL bookmarks and skips folders", () => {
   assert.deepEqual(getTopLevelBookmarkBarUrls(getBookmarkBarFromTree(bookmarkTree)), [
     { id: "10", title: "One", url: "https://one.example" },
     { id: "13", title: "Two", url: "https://two.example" },
-    { id: "14", title: "Three", url: "https://three.example" }
+    { id: "14", title: "Three", url: "https://three.example" },
+    { id: "18", title: "Four", url: "https://four.example" },
+    { id: "19", title: "Five", url: "https://five.example" },
+    { id: "20", title: "Six", url: "https://six.example" },
+    { id: "21", title: "Seven", url: "https://seven.example" },
+    { id: "22", title: "Eight", url: "https://eight.example" },
+    { id: "23", title: "Nine", url: "https://nine.example" },
+    { id: "24", title: "Ten", url: "https://ten.example" }
   ]);
 });
 
@@ -54,21 +68,22 @@ test("continues numbering after folders and blocked URL schemes", () => {
   assert.equal(getBookmarkUrlByOneBasedIndex(bar, 1), "https://one.example");
   assert.equal(getBookmarkUrlByOneBasedIndex(bar, 2), "https://two.example");
   assert.equal(getBookmarkUrlByOneBasedIndex(bar, 3), "https://three.example");
+  assert.equal(getBookmarkUrlByOneBasedIndex(bar, 10), "https://ten.example");
 });
 
 test("returns null for out-of-range bookmark indexes", () => {
   const bar = getBookmarkBarFromTree(bookmarkTree);
 
   assert.equal(getBookmarkUrlByOneBasedIndex(bar, 0), null);
-  assert.equal(getBookmarkUrlByOneBasedIndex(bar, 4), null);
-  assert.equal(getBookmarkUrlByOneBasedIndex(bar, 10), null);
+  assert.equal(getBookmarkUrlByOneBasedIndex(bar, 11), null);
 });
 
 test("parses supported command names only", () => {
   assert.equal(getCommandIndex("open-bookmark-1"), 1);
   assert.equal(getCommandIndex("open-bookmark-9"), 9);
+  assert.equal(getCommandIndex("open-bookmark-10"), 10);
   assert.equal(getCommandIndex("open-bookmark-0"), null);
-  assert.equal(getCommandIndex("open-bookmark-10"), null);
+  assert.equal(getCommandIndex("open-bookmark-11"), null);
   assert.equal(getCommandIndex("other"), null);
 });
 

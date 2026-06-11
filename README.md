@@ -2,11 +2,12 @@
 
 Safari-style bookmark bar shortcuts for Chrome on macOS.
 
-ShortMarker lets you open the first nine top-level bookmark bar URLs with Chrome extension commands. Folders are skipped while counting, so the next URL bookmark keeps the next number.
+ShortMarker lets you open the first ten top-level bookmark bar URLs with Chrome extension commands. It also supports one custom URL command that is independent of the bookmark bar. Folders are skipped while counting, so the next URL bookmark keeps the next number.
 
 ## Features
 
-- Opens bookmark bar URLs by number.
+- Opens bookmark bar URLs by number, from 1 through 10.
+- Opens one custom URL that you configure in the extension options.
 - Counts only top-level bookmark bar items that are real web URLs.
 - Skips folders and non-web URL schemes such as `javascript:`, `data:`, and `file:`.
 - Opens the selected bookmark in the active tab, falling back to a new tab if the active tab cannot be navigated.
@@ -16,9 +17,9 @@ ShortMarker lets you open the first nine top-level bookmark bar URLs with Chrome
 
 ## Chrome Shortcut Limitation
 
-Chrome already reserves `Command+1` through `Command+9` on macOS for tab switching. Chrome extensions cannot disable or override some browser-level shortcuts.
+Chrome already reserves `Command+1` through `Command+9` on macOS for tab switching. Chrome may also reserve or reject other browser-level shortcuts. Chrome extensions cannot disable or override some browser-level shortcuts.
 
-For that reason, ShortMarker declares nine commands without default shortcuts. After installing it, open `chrome://extensions/shortcuts` and assign shortcuts manually. If Chrome refuses `Command+1` through `Command+9`, use a non-reserved alternative such as `Command+Shift+1` through `Command+Shift+9`.
+For that reason, ShortMarker declares commands without default shortcuts. After installing it, open `chrome://extensions/shortcuts` and assign shortcuts manually. If Chrome refuses `Command+1` through `Command+9`, use a non-reserved alternative such as `Command+Shift+1` through `Command+Shift+9`.
 
 Chrome's commands API also allows only a limited number of default shortcut suggestions in `manifest.json`, so ShortMarker intentionally leaves the command shortcuts unassigned by default.
 
@@ -30,7 +31,19 @@ Chrome's commands API also allows only a limited number of default shortcut sugg
 4. Click `Load unpacked`.
 5. Select the `ShortMarker` folder.
 6. Open `chrome://extensions/shortcuts`.
-7. Assign shortcuts to `Open bookmark bar URL 1` through `Open bookmark bar URL 9`.
+7. Assign shortcuts to `Open bookmark bar URL 1` through `Open bookmark bar URL 10`.
+8. Assign a shortcut to `Open the custom ShortMarker URL` if you want to use the custom URL command.
+
+## Custom URL
+
+1. Open `chrome://extensions`.
+2. Find ShortMarker.
+3. Click `Details`.
+4. Click `Extension options`.
+5. Enter an `http:` or `https:` URL and save it.
+6. Assign your preferred shortcut to `Open the custom ShortMarker URL` in `chrome://extensions/shortcuts`.
+
+The intended shortcut is ``Command+` ``, but Chrome may reject it depending on your browser and system shortcut settings.
 
 ## Usage
 
@@ -50,6 +63,7 @@ The command order is:
 1 -> GitHub
 2 -> Gmail
 3 -> Calendar
+0 -> the 10th top-level URL bookmark
 ```
 
 ## Security Notes
@@ -61,6 +75,7 @@ The command order is:
 - No remote code is loaded.
 - No analytics or telemetry is included.
 - Only `http:` and `https:` bookmark URLs are opened.
+- The custom URL is stored with `chrome.storage.sync`.
 
 ## Development
 
@@ -82,11 +97,12 @@ docker run --rm shortmarker
 
 macOS Chrome에서 Safari처럼 북마크바 사이트를 단축키로 여는 확장 프로그램입니다.
 
-ShortMarker는 Chrome 확장 명령을 통해 북마크바의 상위 URL 북마크 1번부터 9번까지를 열 수 있게 해줍니다. 폴더는 번호 계산에서 제외되므로, 폴더 뒤에 있는 URL 북마크가 다음 번호를 이어받습니다.
+ShortMarker는 Chrome 확장 명령을 통해 북마크바의 상위 URL 북마크 1번부터 10번까지를 열 수 있게 해줍니다. 북마크바와 무관하게 직접 지정하는 커스텀 URL 명령도 지원합니다. 폴더는 번호 계산에서 제외되므로, 폴더 뒤에 있는 URL 북마크가 다음 번호를 이어받습니다.
 
 ## 주요 기능
 
-- 북마크바 URL을 번호로 열기
+- 북마크바 URL을 1번부터 10번까지 번호로 열기
+- 옵션에서 설정한 커스텀 URL 열기
 - 북마크바의 최상위 항목 중 실제 웹 URL만 계산
 - 폴더와 `javascript:`, `data:`, `file:` 같은 비웹 URL 스킴은 제외
 - 선택한 북마크를 현재 활성 탭에서 열고, 활성 탭 이동이 실패하면 새 탭으로 열기
@@ -96,9 +112,9 @@ ShortMarker는 Chrome 확장 명령을 통해 북마크바의 상위 URL 북마�
 
 ## Chrome 단축키 제한
 
-macOS Chrome은 이미 `Command+1`부터 `Command+9`까지를 탭 전환 단축키로 사용합니다. Chrome 확장 프로그램은 일부 브라우저 기본 단축키를 비활성화하거나 강제로 우선할 수 없습니다.
+macOS Chrome은 이미 `Command+1`부터 `Command+9`까지를 탭 전환 단축키로 사용합니다. 다른 브라우저 레벨 단축키도 Chrome이 거부하거나 예약할 수 있습니다. Chrome 확장 프로그램은 일부 브라우저 기본 단축키를 비활성화하거나 강제로 우선할 수 없습니다.
 
-그래서 ShortMarker는 9개의 명령만 선언하고 기본 단축키는 비워둡니다. 설치 후 `chrome://extensions/shortcuts`로 이동해 직접 단축키를 지정하세요. Chrome이 `Command+1`부터 `Command+9`까지를 허용하지 않으면 `Command+Shift+1`부터 `Command+Shift+9` 같은 대체 조합을 사용하면 됩니다.
+그래서 ShortMarker는 명령만 선언하고 기본 단축키는 비워둡니다. 설치 후 `chrome://extensions/shortcuts`로 이동해 직접 단축키를 지정하세요. Chrome이 `Command+1`부터 `Command+9`까지를 허용하지 않으면 `Command+Shift+1`부터 `Command+Shift+9` 같은 대체 조합을 사용하면 됩니다.
 
 또한 Chrome commands API는 `manifest.json`에서 기본 단축키 제안 수를 제한하므로, ShortMarker는 의도적으로 기본 단축키를 지정하지 않습니다.
 
@@ -110,7 +126,19 @@ macOS Chrome은 이미 `Command+1`부터 `Command+9`까지를 탭 전환 단축�
 4. `Load unpacked`를 클릭합니다.
 5. `ShortMarker` 폴더를 선택합니다.
 6. `chrome://extensions/shortcuts`를 엽니다.
-7. `Open bookmark bar URL 1`부터 `Open bookmark bar URL 9`까지 원하는 단축키를 지정합니다.
+7. `Open bookmark bar URL 1`부터 `Open bookmark bar URL 10`까지 원하는 단축키를 지정합니다.
+8. 커스텀 URL 명령을 쓰려면 `Open the custom ShortMarker URL`에도 원하는 단축키를 지정합니다.
+
+## 커스텀 URL
+
+1. `chrome://extensions`를 엽니다.
+2. ShortMarker를 찾습니다.
+3. `Details`를 클릭합니다.
+4. `Extension options`를 클릭합니다.
+5. `http:` 또는 `https:` URL을 입력하고 저장합니다.
+6. `chrome://extensions/shortcuts`에서 `Open the custom ShortMarker URL`에 원하는 단축키를 지정합니다.
+
+의도한 단축키는 ``Command+` ``이지만, Chrome이나 시스템 단축키 설정에 따라 거부될 수 있습니다.
 
 ## 사용 방법
 
@@ -130,6 +158,7 @@ GitHub | 업무 폴더 | Gmail | Calendar
 1 -> GitHub
 2 -> Gmail
 3 -> Calendar
+0 -> 최상위 URL 북마크 중 10번째
 ```
 
 ## 보안 메모
@@ -141,6 +170,7 @@ GitHub | 업무 폴더 | Gmail | Calendar
 - 원격 코드 로딩 없음
 - 분석/추적 코드 없음
 - `http:` 및 `https:` 북마크 URL만 열기
+- 커스텀 URL은 `chrome.storage.sync`에 저장
 
 ## 개발
 
