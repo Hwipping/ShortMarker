@@ -2,15 +2,16 @@
 
 Safari-style bookmark bar shortcuts for Chrome on macOS.
 
-ShortMarker lets you open the first ten top-level bookmark bar URLs with Chrome extension commands. It also supports one custom URL command that is independent of the bookmark bar. Folders are skipped while counting, so the next URL bookmark keeps the next number.
+ShortMarker lets you open top-level bookmark bar URLs and top-level bookmark bar folders with Chrome extension commands. URL commands count only URL bookmarks. Folder commands count only folders, skipping individual URL bookmarks when assigning folder numbers, and open every allowed bookmark URL inside the selected folder.
 
 ## Features
 
-- Opens bookmark bar URLs by number, from 1 through 10.
-- Opens one custom URL that you configure in the extension options.
-- Counts only top-level bookmark bar items that are real web URLs.
-- Skips folders and non-web URL schemes such as `javascript:`, `data:`, and `file:`.
-- Opens the selected bookmark in the active tab, falling back to a new tab if the active tab cannot be navigated.
+- Opens bookmark bar URLs by number, from URL 1 through URL 10.
+- Opens bookmark bar folders by number, from Folder 1 through Folder 10.
+- URL commands count only top-level bookmark bar items that are real web URLs.
+- Folder commands count only top-level bookmark bar folders and skip individual URL bookmarks when assigning Folder 1-10.
+- Folder commands open all `http:` and `https:` bookmarks inside the selected folder, including bookmarks inside nested folders.
+- Skips non-web URL schemes such as `javascript:`, `data:`, and `file:`.
 - Uses Manifest V3.
 - Does not inject scripts into websites.
 - Does not make network requests.
@@ -31,51 +32,48 @@ Chrome's commands API also allows only a limited number of default shortcut sugg
 4. Click `Load unpacked`.
 5. Select the `ShortMarker` folder.
 6. Open `chrome://extensions/shortcuts`.
-7. Assign shortcuts to `Open bookmark bar URL 1` through `Open bookmark bar URL 10`.
-8. Assign a shortcut to `Open the custom ShortMarker URL` if you want to use the custom URL command.
-
-## Custom URL
-
-1. Open `chrome://extensions`.
-2. Find ShortMarker.
-3. Click `Details`.
-4. Click `Extension options`.
-5. Enter an `http:` or `https:` URL and save it.
-6. Assign your preferred shortcut to `Open the custom ShortMarker URL` in `chrome://extensions/shortcuts`.
-
-The intended shortcut is ``Command+` ``, but Chrome may reject it depending on your browser and system shortcut settings.
+7. Assign shortcuts to `Open Bookmark Bar URL 1` through `Open Bookmark Bar URL 10`.
+8. Assign separate shortcuts to `Open Bookmark Bar Folder 1` through `Open Bookmark Bar Folder 10`.
 
 ## Usage
 
-1. Put your frequently used sites directly on Chrome's bookmark bar.
-2. Keep folders wherever you like; folders are ignored while counting.
-3. Trigger the shortcut assigned to a command.
+Put frequently used sites and folders directly on Chrome's bookmark bar.
 
 Example bookmark bar:
 
 ```text
-GitHub | Work Folder | Gmail | Calendar
+GitHub | Work Folder | Gmail | Research Folder | Calendar
 ```
 
-The command order is:
+URL command order:
 
 ```text
-1 -> GitHub
-2 -> Gmail
-3 -> Calendar
-0 -> the 10th top-level URL bookmark
+URL 1 -> GitHub
+URL 2 -> Gmail
+URL 3 -> Calendar
 ```
+
+Folder command order:
+
+```text
+Folder 1 -> Work Folder
+Folder 2 -> Research Folder
+```
+
+Individual URL bookmarks such as GitHub, Gmail, and Calendar are ignored when ShortMarker calculates the Folder 1-10 order.
+
+When a folder command runs, ShortMarker opens every allowed `http:` or `https:` bookmark inside that folder in new tabs. Nested folders are included.
 
 ## Security Notes
 
 - Required permission: `bookmarks`.
 - No `tabs` permission is requested.
+- No `storage` permission is requested.
 - No host permissions are requested.
 - No content scripts are used.
 - No remote code is loaded.
 - No analytics or telemetry is included.
 - Only `http:` and `https:` bookmark URLs are opened.
-- The custom URL is stored with `chrome.storage.sync`.
 
 ## Development
 
@@ -84,28 +82,23 @@ npm test
 npm run validate
 ```
 
-## Docker Test
-
-```sh
-docker build -t shortmarker .
-docker run --rm shortmarker
-```
-
 ---
 
 # ShortMarker 한국어 안내
 
-macOS Chrome에서 Safari처럼 북마크바 사이트를 단축키로 여는 확장 프로그램입니다.
+macOS Chrome에서 Safari처럼 북마크바 사이트와 폴더를 단축키로 여는 확장 프로그램입니다.
 
-ShortMarker는 Chrome 확장 명령을 통해 북마크바의 상위 URL 북마크 1번부터 10번까지를 열 수 있게 해줍니다. 북마크바와 무관하게 직접 지정하는 커스텀 URL 명령도 지원합니다. 폴더는 번호 계산에서 제외되므로, 폴더 뒤에 있는 URL 북마크가 다음 번호를 이어받습니다.
+ShortMarker는 Chrome 확장 명령을 통해 북마크바의 최상위 URL 북마크와 최상위 폴더를 열 수 있게 해줍니다. URL 명령은 URL 북마크만 세고, 폴더 명령은 개별 즐겨찾기를 건너뛰고 폴더만 순서대로 세며, 선택한 폴더 안에 포함된 즐겨찾기를 한 번에 엽니다.
 
 ## 주요 기능
 
-- 북마크바 URL을 1번부터 10번까지 번호로 열기
-- 옵션에서 설정한 커스텀 URL 열기
-- 북마크바의 최상위 항목 중 실제 웹 URL만 계산
-- 폴더와 `javascript:`, `data:`, `file:` 같은 비웹 URL 스킴은 제외
-- 선택한 북마크를 현재 활성 탭에서 열고, 활성 탭 이동이 실패하면 새 탭으로 열기
+- 북마크바 URL을 URL 1부터 URL 10까지 번호로 열기
+- 북마크바 폴더를 Folder 1부터 Folder 10까지 번호로 열기
+- URL 명령은 북마크바 최상위 항목 중 실제 웹 URL만 계산
+- Folder 명령은 개별 URL 즐겨찾기를 건너뛰고 북마크바 최상위 폴더만 Folder 1-10 순서로 계산
+- Folder 명령은 선택한 폴더 안의 `http:` 및 `https:` 북마크를 모두 새 탭으로 열기
+- 폴더 안의 중첩 폴더에 들어있는 북마크도 함께 열기
+- `javascript:`, `data:`, `file:` 같은 비웹 URL 스킴은 제외
 - Manifest V3 사용
 - 웹사이트에 스크립트를 주입하지 않음
 - 외부 네트워크 요청 없음
@@ -126,62 +119,52 @@ macOS Chrome은 이미 `Command+1`부터 `Command+9`까지를 탭 전환 단축�
 4. `Load unpacked`를 클릭합니다.
 5. `ShortMarker` 폴더를 선택합니다.
 6. `chrome://extensions/shortcuts`를 엽니다.
-7. `Open bookmark bar URL 1`부터 `Open bookmark bar URL 10`까지 원하는 단축키를 지정합니다.
-8. 커스텀 URL 명령을 쓰려면 `Open the custom ShortMarker URL`에도 원하는 단축키를 지정합니다.
-
-## 커스텀 URL
-
-1. `chrome://extensions`를 엽니다.
-2. ShortMarker를 찾습니다.
-3. `Details`를 클릭합니다.
-4. `Extension options`를 클릭합니다.
-5. `http:` 또는 `https:` URL을 입력하고 저장합니다.
-6. `chrome://extensions/shortcuts`에서 `Open the custom ShortMarker URL`에 원하는 단축키를 지정합니다.
-
-의도한 단축키는 ``Command+` ``이지만, Chrome이나 시스템 단축키 설정에 따라 거부될 수 있습니다.
+7. `Open Bookmark Bar URL 1`부터 `Open Bookmark Bar URL 10`까지 원하는 단축키를 지정합니다.
+8. `Open Bookmark Bar Folder 1`부터 `Open Bookmark Bar Folder 10`까지 별도의 단축키를 지정합니다.
 
 ## 사용 방법
 
-1. 자주 쓰는 사이트를 Chrome 북마크바에 직접 등록합니다.
-2. 폴더는 원하는 위치에 두어도 됩니다. 번호 계산에서 제외됩니다.
-3. 각 명령에 지정한 단축키를 누릅니다.
+자주 쓰는 사이트와 폴더를 Chrome 북마크바에 직접 등록합니다.
 
 예시 북마크바:
 
 ```text
-GitHub | 업무 폴더 | Gmail | Calendar
+GitHub | 업무 폴더 | Gmail | 자료 폴더 | Calendar
 ```
 
-명령 순서는 다음과 같습니다.
+URL 명령 순서:
 
 ```text
-1 -> GitHub
-2 -> Gmail
-3 -> Calendar
-0 -> 최상위 URL 북마크 중 10번째
+URL 1 -> GitHub
+URL 2 -> Gmail
+URL 3 -> Calendar
 ```
+
+Folder 명령 순서:
+
+```text
+Folder 1 -> 업무 폴더
+Folder 2 -> 자료 폴더
+```
+
+GitHub, Gmail, Calendar 같은 개별 URL 즐겨찾기는 Folder 1-10 순서를 계산할 때 무시됩니다.
+
+폴더 명령을 실행하면 ShortMarker는 해당 폴더 안의 허용된 `http:` 또는 `https:` 북마크를 모두 새 탭으로 엽니다. 중첩 폴더도 포함됩니다.
 
 ## 보안 메모
 
 - 필요한 권한: `bookmarks`
 - `tabs` 권한 요청 없음
+- `storage` 권한 요청 없음
 - host permission 요청 없음
 - content script 사용 없음
 - 원격 코드 로딩 없음
 - 분석/추적 코드 없음
 - `http:` 및 `https:` 북마크 URL만 열기
-- 커스텀 URL은 `chrome.storage.sync`에 저장
 
 ## 개발
 
 ```sh
 npm test
 npm run validate
-```
-
-## Docker 테스트
-
-```sh
-docker build -t shortmarker .
-docker run --rm shortmarker
 ```

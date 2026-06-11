@@ -1,22 +1,14 @@
 import {
+  getBookmarkCommandIndex,
   getBookmarkBarFromTree,
   getBookmarkUrlByOneBasedIndex,
-  getCommandIndex,
-  isAllowedBookmarkUrl
+  getFolderCommandIndex,
+  getFolderUrlsByOneBasedIndex
 } from "./bookmarks.js";
-
-export const CUSTOM_URL_STORAGE_KEY = "customUrl";
-export const OPEN_CUSTOM_URL_COMMAND = "open-custom-url";
 
 async function getBookmarkBar() {
   const tree = await chrome.bookmarks.getTree();
   return getBookmarkBarFromTree(tree);
-}
-
-async function getCustomUrl() {
-  const result = await chrome.storage.sync.get({ [CUSTOM_URL_STORAGE_KEY]: "" });
-  const url = result[CUSTOM_URL_STORAGE_KEY];
-  return isAllowedBookmarkUrl(url) ? url : null;
 }
 
 async function navigateActiveTab(url) {
@@ -35,18 +27,14 @@ async function navigateActiveTab(url) {
   await chrome.tabs.create({ url });
 }
 
-export async function openBookmarkForCommand(command) {
-  if (command === OPEN_CUSTOM_URL_COMMAND) {
-    const customUrl = await getCustomUrl();
-    if (!customUrl) {
-      return false;
-    }
-
-    await navigateActiveTab(customUrl);
-    return true;
+async function openUrlsInNewTabs(urls) {
+  for (const url of urls) {
+    await chrome.tabs.create({ url });
   }
+}
 
-  const index = getCommandIndex(command);
+export async function openBookmarkForCommand(command) {
+  const index = getBookmarkCommandIndex(command);
   if (!index) {
     return false;
   }
@@ -61,8 +49,25 @@ export async function openBookmarkForCommand(command) {
   return true;
 }
 
+export async function openFolderForCommand(command) {
+  const index = getFolderCommandIndex(command);
+  if (!index) {
+    return false;
+  }
+
+  const bookmarkBar = await getBookmarkBar();
+  const urls = getFolderUrlsByOneBasedIndex(bookmarkBar, index);
+  if (urls.length === 0) {
+    return false;
+  }
+
+  await openUrlsInNewTabs(urls);
+  return true;
+}
+
 chrome.commands.onCommand.addListener((command) => {
-  openBookmarkForCommand(command).catch((error) => {
+  const handler = command.startsWith("open-folder-") ? openFolderForCommand : openBookmarkForCommand;
+  handler(command).catch((error) => {
     console.error(`Failed to handle ${command}`, error);
   });
 });

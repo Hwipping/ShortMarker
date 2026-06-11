@@ -2,10 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  collectAllowedBookmarkUrls,
   getBookmarkBarFromTree,
+  getBookmarkCommandIndex,
   getBookmarkUrlByOneBasedIndex,
-  getCommandIndex,
+  getFolderCommandIndex,
+  getFolderUrlsByOneBasedIndex,
   isAllowedBookmarkUrl,
+  getTopLevelBookmarkBarFolders,
   getTopLevelBookmarkBarUrls
 } from "../src/bookmarks.js";
 
@@ -21,9 +25,20 @@ const bookmarkTree = [
           { id: "10", title: "One", url: "https://one.example" },
           {
             id: "11",
-            title: "Folder",
-            children: [{ id: "12", title: "Nested", url: "https://nested.example" }]
+            title: "Folder One",
+            children: [
+              { id: "12", title: "Nested", url: "https://nested.example" },
+              {
+                id: "25",
+                title: "Nested Folder",
+                children: [
+                  { id: "26", title: "Deep", url: "https://deep.example" },
+                  { id: "27", title: "Blocked", url: "javascript:alert(1)" }
+                ]
+              }
+            ]
           },
+          { id: "28", title: "Folder Two", children: [{ id: "29", title: "Other", url: "https://other.example" }] },
           { id: "15", title: "Bookmarklet", url: "javascript:alert(document.cookie)" },
           { id: "16", title: "Local file", url: "file:///Users/example/secret.txt" },
           { id: "17", title: "Data URL", url: "data:text/html,<h1>hello</h1>" },
@@ -62,6 +77,31 @@ test("lists only top-level URL bookmarks and skips folders", () => {
   ]);
 });
 
+test("lists only top-level bookmark bar folders", () => {
+  assert.deepEqual(getTopLevelBookmarkBarFolders(getBookmarkBarFromTree(bookmarkTree)), [
+    {
+      id: "11",
+      title: "Folder One",
+      children: [
+        { id: "12", title: "Nested", url: "https://nested.example" },
+        {
+          id: "25",
+          title: "Nested Folder",
+          children: [
+            { id: "26", title: "Deep", url: "https://deep.example" },
+            { id: "27", title: "Blocked", url: "javascript:alert(1)" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "28",
+      title: "Folder Two",
+      children: [{ id: "29", title: "Other", url: "https://other.example" }]
+    }
+  ]);
+});
+
 test("continues numbering after folders and blocked URL schemes", () => {
   const bar = getBookmarkBarFromTree(bookmarkTree);
 
@@ -69,6 +109,26 @@ test("continues numbering after folders and blocked URL schemes", () => {
   assert.equal(getBookmarkUrlByOneBasedIndex(bar, 2), "https://two.example");
   assert.equal(getBookmarkUrlByOneBasedIndex(bar, 3), "https://three.example");
   assert.equal(getBookmarkUrlByOneBasedIndex(bar, 10), "https://ten.example");
+});
+
+test("collects allowed URLs recursively from a folder", () => {
+  const folder = getTopLevelBookmarkBarFolders(getBookmarkBarFromTree(bookmarkTree))[0];
+
+  assert.deepEqual(collectAllowedBookmarkUrls(folder), [
+    "https://nested.example",
+    "https://deep.example"
+  ]);
+});
+
+test("gets folder URLs by top-level folder index", () => {
+  const bar = getBookmarkBarFromTree(bookmarkTree);
+
+  assert.deepEqual(getFolderUrlsByOneBasedIndex(bar, 1), [
+    "https://nested.example",
+    "https://deep.example"
+  ]);
+  assert.deepEqual(getFolderUrlsByOneBasedIndex(bar, 2), ["https://other.example"]);
+  assert.deepEqual(getFolderUrlsByOneBasedIndex(bar, 11), []);
 });
 
 test("returns null for out-of-range bookmark indexes", () => {
@@ -79,12 +139,23 @@ test("returns null for out-of-range bookmark indexes", () => {
 });
 
 test("parses supported command names only", () => {
-  assert.equal(getCommandIndex("open-bookmark-1"), 1);
-  assert.equal(getCommandIndex("open-bookmark-9"), 9);
-  assert.equal(getCommandIndex("open-bookmark-10"), 10);
-  assert.equal(getCommandIndex("open-bookmark-0"), null);
-  assert.equal(getCommandIndex("open-bookmark-11"), null);
-  assert.equal(getCommandIndex("other"), null);
+  assert.equal(getBookmarkCommandIndex("open-bookmark-01"), 1);
+  assert.equal(getBookmarkCommandIndex("open-bookmark-09"), 9);
+  assert.equal(getBookmarkCommandIndex("open-bookmark-10"), 10);
+  assert.equal(getBookmarkCommandIndex("open-bookmark-0"), null);
+  assert.equal(getBookmarkCommandIndex("open-bookmark-1"), null);
+  assert.equal(getBookmarkCommandIndex("open-bookmark-11"), null);
+  assert.equal(getBookmarkCommandIndex("other"), null);
+});
+
+test("parses supported folder command names only", () => {
+  assert.equal(getFolderCommandIndex("open-folder-01"), 1);
+  assert.equal(getFolderCommandIndex("open-folder-09"), 9);
+  assert.equal(getFolderCommandIndex("open-folder-10"), 10);
+  assert.equal(getFolderCommandIndex("open-folder-0"), null);
+  assert.equal(getFolderCommandIndex("open-folder-1"), null);
+  assert.equal(getFolderCommandIndex("open-folder-11"), null);
+  assert.equal(getFolderCommandIndex("other"), null);
 });
 
 test("allows only http and https bookmark URLs", () => {

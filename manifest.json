@@ -1,50 +1,73 @@
 {
   "manifest_version": 3,
   "name": "ShortMarker",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Safari-style bookmark bar shortcuts for Chrome.",
-  "permissions": ["bookmarks", "storage"],
+  "permissions": ["bookmarks"],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
   },
-  "options_ui": {
-    "page": "options.html",
-    "open_in_tab": false
-  },
   "commands": {
-    "open-custom-url": {
-      "description": "Open the custom ShortMarker URL"
+    "open-bookmark-01": {
+      "description": "Open Bookmark Bar URL 1"
     },
-    "open-bookmark-1": {
-      "description": "Open bookmark bar URL 1"
+    "open-bookmark-02": {
+      "description": "Open Bookmark Bar URL 2"
     },
-    "open-bookmark-2": {
-      "description": "Open bookmark bar URL 2"
+    "open-bookmark-03": {
+      "description": "Open Bookmark Bar URL 3"
     },
-    "open-bookmark-3": {
-      "description": "Open bookmark bar URL 3"
+    "open-bookmark-04": {
+      "description": "Open Bookmark Bar URL 4"
     },
-    "open-bookmark-4": {
-      "description": "Open bookmark bar URL 4"
+    "open-bookmark-05": {
+      "description": "Open Bookmark Bar URL 5"
     },
-    "open-bookmark-5": {
-      "description": "Open bookmark bar URL 5"
+    "open-bookmark-06": {
+      "description": "Open Bookmark Bar URL 6"
     },
-    "open-bookmark-6": {
-      "description": "Open bookmark bar URL 6"
+    "open-bookmark-07": {
+      "description": "Open Bookmark Bar URL 7"
     },
-    "open-bookmark-7": {
-      "description": "Open bookmark bar URL 7"
+    "open-bookmark-08": {
+      "description": "Open Bookmark Bar URL 8"
     },
-    "open-bookmark-8": {
-      "description": "Open bookmark bar URL 8"
-    },
-    "open-bookmark-9": {
-      "description": "Open bookmark bar URL 9"
+    "open-bookmark-09": {
+      "description": "Open Bookmark Bar URL 9"
     },
     "open-bookmark-10": {
-      "description": "Open bookmark bar URL 10"
+      "description": "Open Bookmark Bar URL 10"
+    },
+    "open-folder-01": {
+      "description": "Open Bookmark Bar Folder 1"
+    },
+    "open-folder-02": {
+      "description": "Open Bookmark Bar Folder 2"
+    },
+    "open-folder-03": {
+      "description": "Open Bookmark Bar Folder 3"
+    },
+    "open-folder-04": {
+      "description": "Open Bookmark Bar Folder 4"
+    },
+    "open-folder-05": {
+      "description": "Open Bookmark Bar Folder 5"
+    },
+    "open-folder-06": {
+      "description": "Open Bookmark Bar Folder 6"
+    },
+    "open-folder-07": {
+      "description": "Open Bookmark Bar Folder 7"
+    },
+    "open-folder-08": {
+      "description": "Open Bookmark Bar Folder 8"
+    },
+    "open-folder-09": {
+      "description": "Open Bookmark Bar Folder 9"
+    },
+    "open-folder-10": {
+      "description": "Open Bookmark Bar Folder 10"
     }
   }
 }

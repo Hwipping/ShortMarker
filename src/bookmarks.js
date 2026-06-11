@@ -33,6 +33,36 @@ export function getTopLevelBookmarkBarUrls(bookmarkBarNode) {
     }));
 }
 
+export function getTopLevelBookmarkBarFolders(bookmarkBarNode) {
+  if (!bookmarkBarNode || !Array.isArray(bookmarkBarNode.children)) {
+    return [];
+  }
+
+  return bookmarkBarNode.children
+    .filter((node) => !node.url && Array.isArray(node.children))
+    .map((node) => ({
+      id: node.id,
+      title: node.title || "Untitled Folder",
+      children: node.children
+    }));
+}
+
+export function collectAllowedBookmarkUrls(node) {
+  if (!node) {
+    return [];
+  }
+
+  if (isAllowedBookmarkUrl(node.url)) {
+    return [node.url];
+  }
+
+  if (!Array.isArray(node.children)) {
+    return [];
+  }
+
+  return node.children.flatMap((child) => collectAllowedBookmarkUrls(child));
+}
+
 export function getBookmarkUrlByOneBasedIndex(bookmarkBarNode, index) {
   if (!Number.isInteger(index) || index < 1 || index > 10) {
     return null;
@@ -42,7 +72,21 @@ export function getBookmarkUrlByOneBasedIndex(bookmarkBarNode, index) {
   return bookmarks[index - 1]?.url || null;
 }
 
-export function getCommandIndex(command) {
-  const match = /^open-bookmark-([1-9]|10)$/.exec(command);
+export function getFolderUrlsByOneBasedIndex(bookmarkBarNode, index) {
+  if (!Number.isInteger(index) || index < 1 || index > 10) {
+    return [];
+  }
+
+  const folder = getTopLevelBookmarkBarFolders(bookmarkBarNode)[index - 1];
+  return collectAllowedBookmarkUrls(folder);
+}
+
+export function getBookmarkCommandIndex(command) {
+  const match = /^open-bookmark-(0[1-9]|10)$/.exec(command);
+  return match ? Number(match[1]) : null;
+}
+
+export function getFolderCommandIndex(command) {
+  const match = /^open-folder-(0[1-9]|10)$/.exec(command);
   return match ? Number(match[1]) : null;
 }
